@@ -1,0 +1,25 @@
+#pragma once
+#include "main.h"
+#include "SceneBase.h"
+
+#define MAX_TITLE_TEXUTURE			2
+/*
+星5個
+宇宙飛行士
+ステージ名
+矢印*/
+
+
+class Title :public ISceneBase {
+public:
+	HRESULT Init();	// 初期化
+	void Uninit();		// 終了処理
+	void Update();		// 更新
+	void Draw();		// 描画
+
+private:
+	XMFLOAT2 m_vPos[MAX_TITLE_TEXUTURE];
+	XMFLOAT2 m_vSize[MAX_TITLE_TEXUTURE];
+	XMFLOAT4 m_vColor[MAX_TITLE_TEXUTURE];
+	ID3D11ShaderResourceView* m_pTexture[MAX_TITLE_TEXUTURE];
+};

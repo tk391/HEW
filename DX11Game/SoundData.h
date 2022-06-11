@@ -1,0 +1,41 @@
+// BGM/SE定義 (SoundData.h)
+
+enum eBGM {
+	BGM_TITLE = 0,		// タイトル
+	BGM_STAGESELECT,	// ステージセレクト
+
+	BGM_STAGE1,			// ステージ仮
+
+	BGM_RESULTCLEAR,	//リザルト　クリア時
+	BGM_RESULTGAMEOVER,	//リザルト　ゲームオーバー時
+	MAX_BGM
+};
+
+enum eSE {
+	//タイトルシーン
+	SE_TITLEPOP = 0,
+	SE_GOGOGO,
+	SE_TITLEENTER,
+	//ステージセレクトシーン
+	SE_SELECTMOVE,
+	SE_STAGEENTER,
+	SE_STAGEENTERCANCEL,
+	//ゲームシーン
+	SE_START,
+	SE_JET,
+	SE_COLLISION,
+	SE_HOLD,
+	SE_BLACKHOLE,
+	SE_GOSHIP,
+	SE_GAMEGAMEOVER,
+	SE_CONTROLUIPOP,
+	SE_WARNING,
+	//ポーズ画面
+	SE_PAUSESELECT,
+	SE_PAUSEENTER,
+	//リザルト画面
+	SE_RESULTENTER,
+	SE_RESULTSTAR,
+	SE_RESULTMOVE,
+	MAX_SE
+};

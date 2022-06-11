@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\DX11GameD.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\AssimpPixel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\AssimpVertex.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Pixel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Pixel2D.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Vertex.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Vertex2D.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

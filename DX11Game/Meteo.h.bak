@@ -1,0 +1,21 @@
+#pragma once
+#include "main.h"
+class Meteo
+{
+public:
+	//4大処理
+	HRESULT Init(int StageNum);
+	void Uninit();
+	void Update();
+	void Draw();
+	int Collision(XMFLOAT3 pos, XMFLOAT3 size);
+	XMFLOAT3 GetPos(int num);//当たったデブリの位置を取得
+	XMFLOAT3 GetSize(int num);//当たったデブリの大きさを取得
+	XMFLOAT3 GetVector(int num);
+	float GetAngle(int num);
+	XMFLOAT3 GetMoveSpeed(int num);
+private:
+	void Create(int StageNum);	
+	
+};
+

@@ -1,0 +1,6 @@
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\AssimpPixel.cso
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\AssimpVertex.cso
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Pixel.cso
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Pixel2D.cso
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Vertex.cso
+C:\Users\takahiro\Desktop\0115\ProgramData\DX11Game\data\shader\Vertex2D.cso

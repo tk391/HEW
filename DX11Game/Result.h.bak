@@ -1,0 +1,24 @@
+#pragma once
+#include "main.h"
+#include "SceneBase.h"
+
+#define MAX_RESULT_TEXUTURE			6
+
+class Result :
+	public ISceneBase
+{
+public:
+	HRESULT Init();
+	void Uninit();
+	void Update();
+	void Draw();
+	void ActionButton(int nUInum, int count);	//ボタンの上下する動作や色の変化を一括化	01/16 三輪卓弘
+
+private:
+	XMFLOAT2 m_vPos[MAX_RESULT_TEXUTURE];
+	XMFLOAT2 m_vDefaultPos[MAX_RESULT_TEXUTURE];	//それぞれのUIの初期位置		01/16 三輪卓弘
+	XMFLOAT2 m_vSize[MAX_RESULT_TEXUTURE];
+	XMFLOAT4 m_vColor[MAX_RESULT_TEXUTURE];
+	ID3D11ShaderResourceView* m_pTexture[MAX_RESULT_TEXUTURE];
+};
+

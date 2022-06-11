@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\マネージャー">
+      <UniqueIdentifier>{2569e0ae-7cb7-48d8-baeb-f88223537235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ゲーム内オブジェクト">
+      <UniqueIdentifier>{c2edfa8f-306f-409e-98ef-46f58fd5034f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\いじりたくない浜谷先生のプログラム">
+      <UniqueIdentifier>{942b8694-c65a-4ccd-baa0-15224346828e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\マネージャー">
+      <UniqueIdentifier>{63bbadb9-a19b-4e2d-9021-981f71e8bdd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ゲーム内オブジェクト">
+      <UniqueIdentifier>{0b1eb5ca-707b-4eee-98b2-239b0b16c9ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\いじりたくない浜谷先生のプログラム">
+      <UniqueIdentifier>{4dfc67d6-4ad5-4b64-94ad-7db97e38e998}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\シーン">
+      <UniqueIdentifier>{24c7dad1-a745-44fc-9256-7f4ffddfb6f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\シーン">
+      <UniqueIdentifier>{bb348338-ec15-4484-80d5-f0732752faca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssimpModel.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Debly.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="debugproc.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル\マネージャー</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Life.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル\マネージャー</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClCompile>
+    <ClCompile Include="Meteo.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Rayer.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>ソース ファイル\マネージャー</Filter>
+    </ClCompile>
+    <ClCompile Include="AlertBg.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>ソース ファイル\マネージャー</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Select.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectUI.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackHole.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="StartTelop.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="bg.cpp">
+      <Filter>ソース ファイル\マネージャー</Filter>
+    </ClCompile>
+    <ClCompile Include="Result_Astronaut.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Result_Rocket.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Result_UI.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlUI.cpp">
+      <Filter>ソース ファイル\ゲーム内オブジェクト</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AssimpModel.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="debugproc.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="polygon.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>ヘッダー ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </ClInclude>
+    <ClInclude Include="Debly.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Life.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="Meteo.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Rayer.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="AlertBg.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundData.h">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundData.hpp">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBase.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Select.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>ヘッダー ファイル\シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectUI.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackHole.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="StartTelop.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="bg.h">
+      <Filter>ヘッダー ファイル\マネージャー</Filter>
+    </ClInclude>
+    <ClInclude Include="Result_UI.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Result_Astronaut.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Result_Rocket.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlUI.h">
+      <Filter>ヘッダー ファイル\ゲーム内オブジェクト</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="AssimpVertex.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+    <FxCompile Include="AssimpPixel.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+    <FxCompile Include="Pixel2D.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+    <FxCompile Include="Pixel.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+    <FxCompile Include="Vertex.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+    <FxCompile Include="Vertex2D.hlsl">
+      <Filter>ソース ファイル\いじりたくない浜谷先生のプログラム</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX11Game.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\directx9.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="進捗状況.txt" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,473 @@
+//=============================================================================
+// プレイヤー（宇宙飛行士）
+// 12/11 齋藤成希
+//=============================================================================
+#include "Player.h"
+#include "main.h"
+#include "Scene.h"
+#include "input.h"
+#include "AssimpModel.h"
+#include "debugproc.h"
+#include "Game.h"
+#include "Life.h"
+#include"Sound.h"
+#include "fade.h"
+#include "AlertBg.h"
+
+
+// マクロ定義
+#define PLAYER_PLANE			"data/model/Catch_animation.fbx"
+
+#define	VALUE_MOVE_PLAYER	(0.20f)		// 移動速度
+#define	RATE_MOVE_PLAYER		(0.20f)		// 移動慣性係数
+#define	VALUE_ROTATE_PLAYER	(3.5f)		// 回転速度
+#define	RATE_ROTATE_PLAYER	(0.20f)		// 回転慣性係数
+#define VALUE_ROWMOVE_PLAYER		(0.3f)//減速時の移動速度
+
+#define MAX_LIFE			(100.0f)	//ライフ最大数
+#define DEL_JET			(5.0f)		//ジェット使用したときのライフ減少率
+#define DEL_STAY			(0.01f)	//そのままでいるときのライフ減少率
+
+#define PLAYER_SIZE_X		(7.0f)		//サイズ
+#define PLAYER_SIZE_Y		(7.0f)		//サイズ
+
+// グローバル変数
+static CAssimpModel	g_model;				// モデル
+static XMFLOAT4X4		g_mtxWorld;			// ワールドマトリックス
+static int					g_nShadow;			// 丸影番号
+static XMFLOAT3		g_Size;					//当たり判定用のサイズ
+static float					g_RotXPrev;			//1フレーム前の角度
+static int					g_nCountFrame;	//アニメーションを加算するフレーム
+static double				g_d1FrameAnim;	//1フレーム当たりのアニメーション
+static double				g_dSetAnim;			//上記2変数をかけた数->SetAnimTime()に入れる
+static XMFLOAT3		g_effectPos;			//エフェクト用位置
+static XMFLOAT3		g_CameraPos;		//カメラ位置
+
+const float AnimationTime = 30.0f;			//アニメーションの再生時間（フレーム数）
+
+
+//クラス定義
+EffectManager* Player_EffectManager;	//EffectManagerクラス
+Life* Player_Life;			//Lifeクラス
+Debly* Player_Debly;		//Deblyクラス
+Rayer* Player_Rayer;		//Rayerクラス
+
+//============================================
+// 初期化処理
+//============================================
+HRESULT Player::Init(void)
+{
+	HRESULT hr = S_OK;
+	ID3D11Device* pDevice = GetDevice();
+	ID3D11DeviceContext* pDeviceContext = GetDeviceContext();
+
+	// メンバ変数（グローバル変数）の初期設定
+	m_Pos = XMFLOAT3(-470.0f, 4.0f, 0.0f);
+	m_Move = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_Rot = XMFLOAT3(90.0f, -90.0f, 0.0f);
+	m_RotDest = XMFLOAT3(0.0f, -90.0f, 0.0f);
+	m_fLife = MAX_LIFE;
+	m_bFlag = false;
+	g_Size = XMFLOAT3(PLAYER_SIZE_X, PLAYER_SIZE_Y, PLAYER_SIZE_X);
+	g_RotXPrev = 0.0f;
+	g_effectPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	g_CameraPos = XMFLOAT3(m_Pos.x, m_Pos.y, -200.0f);
+
+	// モデルデータの読み込み
+	if (!g_model.Load(pDevice, pDeviceContext, PLAYER_PLANE)) {
+		MessageBoxA(GetMainWnd(), "モデルデータ読み込みエラー", "InitModel", MB_OK);
+		return E_FAIL;
+	}
+
+	//アニメーション管理(初期設定)
+	g_model.SetAnimIndex(1);
+	g_d1FrameAnim = g_model.GetAnimDuration(0) / AnimationTime;
+
+	//カメラのセット
+	CCamera::Get()->SetPos(m_Pos.x, m_Pos.y, m_Pos.z - 200.0f);
+	CCamera::Get()->SetTarget(m_Pos);
+
+	//このクラスで使用する他のクラスの情報を取得
+	Player_EffectManager = GetEffectManager();
+	Player_Life = GetLife();
+	Player_Debly = GetDebly();
+	Player_Rayer = GetRayer();
+
+	return hr;
+}
+
+//============================================
+// 終了処理
+//============================================
+void Player::Uninit(void)
+{
+	// モデルの解放
+	g_model.Release();
+}
+
+//============================================
+// 更新処理
+//============================================
+void Player::Update(void)
+{
+	//一つ前の角度を格納
+	g_RotXPrev = m_RotDest.x;
+
+	// カメラの向き取得
+	XMFLOAT3 rotCamera = CCamera::Get()->GetAngle();
+
+	//パッド操作
+	XMFLOAT2  JOY = XMFLOAT2((float)GetJoyX(0), (float)GetJoyY(0));//左スティックの座標→角度や発射方向に使う
+	float JOYZ = (float)GetJoyZ(0);//ZL,ZRの入力度合いを検出（0未満→ZLを押したとき,0以上→ZRを押したとき）
+
+	//真横や真上にも向けるようにする(あまりに小さい入力は受け付けない)
+	if (JOY.x <= 2000.0f&&JOY.x >= -2000.0f) {
+		JOY.x = 0.0f;
+	}
+	if (JOY.y <= 2000.0f&&JOY.y >= -2000.0f) {
+		JOY.y = 0.0f;
+	}
+	if (JOYZ <= 5000.0f&&JOYZ >= -5000.0f) {
+		JOYZ = 0.0f;
+	}
+
+	//最初は動かない
+	//最初のスペースキーで動き始める
+	if (m_bFlag) {
+		m_Move.x -= SinDeg(m_Rot.x) * VALUE_MOVE_PLAYER;
+		m_Move.y += CosDeg(m_Rot.x) * VALUE_MOVE_PLAYER;
+	}
+
+	//角度を検出して格納
+	if (JOY.x == 0.0f&&JOY.y == 0.0f) {//ジョイスティックの入力がなかった場合
+		m_RotDest.x = g_RotXPrev;
+	}
+	else {
+		m_RotDest.x = RotZ(JOY);
+	}
+
+	//左右向いている方向で角度に差が出る→調整
+	if (JOY.x < 0.0f) {
+		m_RotDest.y = 90.0f;
+		m_RotDest.x *= -1;
+	}
+	else {
+		m_RotDest.y = -90.0f;
+	}
+
+	//XBOXのBボタンを押すと角度変更（修正予定）
+	if (GetJoyTrigger(0, PS4CIRCLE))
+		//if (GetJoyButton(0, PS4CIRCLE))
+	{
+		//左右向いている方向で角度を調整
+		if (JOY.x < 0.0f) {
+			m_Rot.x = -(m_RotDest.x) + 90.0f;
+		}
+		else {
+			m_Rot.x = m_RotDest.x - 90.0f;
+		}
+		m_Rot.y = m_RotDest.y;
+		m_Rot.z = m_RotDest.z;
+		//ジェット噴射
+		m_bFlag = true;
+		m_fLife -= DEL_JET;
+	}
+	else {
+		//常にライフは減少している
+		m_fLife -= DEL_STAY;
+	}
+#if _DEBUG
+	//位置移動
+	if (GetKeyPress(VK_UP)) {
+		m_Pos.y += 2.0f;
+	}
+	else if (GetKeyPress(VK_DOWN)) {
+		m_Pos.y -= 2.0f;
+	}
+	if (GetKeyPress(VK_RIGHT)) {
+		m_Pos.x += 2.0f;
+	}
+	else if (GetKeyPress(VK_LEFT)) {
+		m_Pos.x -= 2.0f;
+	}
+	//#else
+		/// 位置移動
+	m_Pos.x += m_Move.x;
+	m_Pos.y += m_Move.y;
+	m_Pos.z += m_Move.z;
+
+	if (GetJoyTrigger(0, PS4TRIANGLE)) {
+		Player_EffectManager->Start("collision", XMFLOAT3(m_Pos.x - 10.0f, m_Pos.y - 10.0f, m_Pos.z));
+	}
+#endif // _DEBUG
+
+	//範囲外に行くと赤くなる
+	if (GetJoyButton(0, PS4R)) {
+		AlertWarning(true);
+	}
+	else {
+		AlertWarning(false);
+	}
+
+	//掴む
+	if (GetJoyButton(0, PS4SQUARE)) {
+		//掴むモーションに入ったら
+		m_nAnimNum = 0;//アニメーション変更
+		if (g_dSetAnim + g_d1FrameAnim < g_model.GetAnimDuration(0)) {
+			//アニメーションが行ききって元に戻らないように、ギリギリ（最後）の状態を保つ
+			g_nCountFrame++;
+		}
+	}
+	//アニメーションが途中だったら
+	else {
+		//アニメーションが最初まで戻ったら
+		if (g_dSetAnim <= 0.0f) {
+			m_nAnimNum = 1;	//アニメーション変更
+		}
+		else {
+			//アニメーション逆再生
+			g_nCountFrame--;
+		}
+	}
+	g_dSetAnim = g_nCountFrame * g_d1FrameAnim;//アニメーション再生箇所を更新
+	//アニメーションセット
+	g_model.SetAnimTime(g_dSetAnim);
+	g_model.SetAnimIndex(m_nAnimNum);
+
+	//レイヤーの位置をセット
+	Player_Rayer->Set(m_Move.x, m_Move.y);
+
+	//ライフが切れたらリザルト
+	if (m_fLife <= 0.0f) {
+		StartFadeOut(SCENE_RESULT);
+	}
+
+	// 移動量に慣性をかける
+	m_Move.x += (0.0f - m_Move.x) * RATE_MOVE_PLAYER;
+	m_Move.y += (0.0f - m_Move.y) * RATE_MOVE_PLAYER;
+	m_Move.z += (0.0f - m_Move.z) * RATE_MOVE_PLAYER;
+
+	//当たり判定（仮）
+	//挙動の修正お願いします
+	XMINT2 nTouchDebly = Player_Debly->Collision(m_Pos, g_Size);
+	//デブリに触れたら
+	if (nTouchDebly.x >= 0) {
+		XMFLOAT3 CollisionEnemyVector = Player_Debly->GetPos(nTouchDebly.x);//当たった対象物の位置
+		XMFLOAT3 CollisionEnemySize = Player_Debly->GetSize(nTouchDebly.x);//当たった対象物の大きさ
+		switch (nTouchDebly.y) {
+		case 1://右にプレイヤー　左に障害物
+			m_Pos.x += 5.0f;
+			m_Move.x = 0.0f;
+			break;
+		case 2://左にプレイヤー 　右に障害物
+			m_Pos.x -= 5.0f;
+			m_Move.x = 0.0f;
+			break;
+		case 3://上にプレイヤー　下に障害物
+			m_Pos.y += 5.0f;
+			m_Move.y = 0.0f;
+			break;
+		case 4://下にプレイヤー　上に障害物
+			m_Pos.y -= 5.0f;
+			m_Move.y = 0.0f;
+			break;
+		case 5://斜め
+			CollisionEnemyVector.x = m_Pos.x - CollisionEnemyVector.x;
+			CollisionEnemyVector.y = m_Pos.y - CollisionEnemyVector.y;
+			XMStoreFloat3(&CollisionEnemyVector, XMVector3Normalize(XMLoadFloat3(&CollisionEnemyVector)));//ベクトルの正規化
+			XMStoreFloat3(&CollisionEnemySize, XMVector3Normalize(XMLoadFloat3(&CollisionEnemySize)));//ベクトルの正規化
+
+			if (CollisionEnemySize.x < CollisionEnemyVector.x) {
+				m_Pos.x += CollisionEnemyVector.x*3.0f;
+			}
+			else {
+				m_Pos.y += CollisionEnemyVector.y*3.0f;
+			}
+			break;
+		default:break;
+		}
+		m_bFlag = false;
+		CSound::SetVolume(SE_COLLISION, 100.0f);
+		CSound::Play(SE_COLLISION);
+	}
+
+#if _DEBUG
+	float angle;//ジェットエフェクトで使用する角度
+	angle = m_RotDest.x;
+	PrintDebugProc("ｶｸﾄﾞ:%.2f\n", angle);
+
+	if (JOY.x < 0.0f) {
+		angle += 180.0f;
+		angle *= -1;
+	}
+	PrintDebugProc("x,y,z={%.2f,%.2f,%.2f}\n", -(CosDeg(angle)*50.0f), -(SinDeg(angle)*50.0f), 0.0f);
+
+	float rot = m_Rot.x + 90.0f;
+	XMFLOAT3 t = XMFLOAT3(-(CosDeg(angle)*50.0f), -(SinDeg(angle)*50.0f), 0.0f);
+
+	bool flag = false;
+	//エフェクト（仮）
+	if (GetJoyTrigger(0, PS4CIRCLE)) {
+		CSound::SetVolume(SE_JET, 100.0f);
+		CSound::Play(SE_JET);
+	}
+	if (GetJoyButton(0, PS4CIRCLE)) {
+		Player_EffectManager->Start("jet", XMFLOAT3(t.x, t.y, 0.0f), angle);
+		flag = true;
+	}
+#endif
+
+	//ライフによってゲージが変動
+	Player_Life->Set(m_fLife);
+
+	//エフェクト更新
+	Player_EffectManager->Update("jet", XMFLOAT3(t.x, t.y, 0.0f), angle, flag);
+	Player_EffectManager->Update("collision", false);
+
+	XMFLOAT3 sabun = XMFLOAT3(m_Pos.x / 20.0f, m_Pos.y / 20.0f, 800.0f / 20.0f);
+	//spaceを押されたらカメラを引く
+	if (GetKeyPress(VK_SPACE)) {
+		if (g_CameraPos.z > -1000.0f) {
+			g_CameraPos.z -= sabun.z;
+		}
+		if (m_Pos.x >= 0.0f) {
+			if (g_CameraPos.x > 0.0f) {
+				g_CameraPos.x -= sabun.x;
+			}
+			else {
+				//行き過ぎた時の補正
+				g_CameraPos.x = 0.0f;
+			}
+		}
+		else {
+			if (g_CameraPos.x < 0.0f) {
+				g_CameraPos.x -= sabun.x;
+			}
+			else {
+				//行き過ぎた時の補正
+				g_CameraPos.x = 0.0f;
+			}
+		}
+		if (m_Pos.y >= 0.0f) {
+			if (g_CameraPos.y > 0.0f) {
+				g_CameraPos.y -= sabun.y;
+			}
+			else {
+				//行き過ぎた時の補正
+				g_CameraPos.y = 0.0f;
+			}
+		}
+		else {
+			if (g_CameraPos.y < 0.0f) {
+				g_CameraPos.y -= sabun.y;
+			}
+			else {
+				//行き過ぎた時の補正
+				g_CameraPos.y = 0.0f;
+			}
+		}
+	}
+	//何も押されてないときは引かれているか確認
+	else {
+		//カメラが引いていたら
+		if (g_CameraPos.z < -200.0f) {
+			g_CameraPos.z += sabun.z;
+			if (m_Pos.x >= 0.0f) {
+				if (g_CameraPos.x < m_Pos.x) {
+					g_CameraPos.x += sabun.x;
+				}
+				else {
+					g_CameraPos.x = m_Pos.x;//行き過ぎた時の補正
+				}
+			}
+			else {
+				if (g_CameraPos.x > m_Pos.x) {
+					g_CameraPos.x += sabun.x;
+				}
+				else {
+					g_CameraPos.x = m_Pos.x;//行き過ぎた時の補正
+				}
+			}
+			if (m_Pos.y >= 0.0f) {
+				if (g_CameraPos.y < m_Pos.y) {
+					g_CameraPos.y += sabun.y;
+				}
+				else {
+					g_CameraPos.y = m_Pos.y;//行き過ぎた時の補正
+				}
+			}
+			else {
+				if (g_CameraPos.y > m_Pos.y) {
+					g_CameraPos.y += sabun.y;
+				}
+				else {
+					g_CameraPos.y = m_Pos.y;//行き過ぎた時の補正
+				}
+			}
+		}
+		//カメラが引いていなかったらそのまま位置をカメラ位置に置き換える
+		else {
+			g_CameraPos = XMFLOAT3(m_Pos.x, m_Pos.y, -200.0f);
+		}
+	}
+
+	CCamera::Get()->SetPos(g_CameraPos);
+	CCamera::Get()->SetTarget(g_CameraPos.x, g_CameraPos.y, 0.0f);
+
+	XMMATRIX mtxWorld, mtxRot, mtxTranslate;
+
+	// ワールドマトリックスの初期化
+	mtxWorld = XMMatrixIdentity();
+
+	// 回転を反映
+	mtxRot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(m_RotDest.x),
+		XMConvertToRadians(m_RotDest.y), XMConvertToRadians(m_RotDest.z));
+	mtxWorld = XMMatrixMultiply(mtxWorld, mtxRot);
+
+	// 移動を反映
+	mtxTranslate = XMMatrixTranslation(m_Pos.x, m_Pos.y, m_Pos.z);
+	mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+
+	// ワールドマトリックス設定
+	XMStoreFloat4x4(&g_mtxWorld, mtxWorld);
+}
+
+//============================================
+// 描画処理
+//============================================
+void Player::Draw(void)
+{
+	ID3D11DeviceContext* pDC = GetDeviceContext();
+
+	// 不透明部分を描画
+	g_model.Draw(pDC, g_mtxWorld, eOpacityOnly);
+
+	// 半透明部分を描画
+	SetBlendState(BS_ALPHABLEND);	// アルファブレンド有効
+	SetZWrite(false);				// Zバッファ更新しない
+	g_model.Draw(pDC, g_mtxWorld, eTransparentOnly);
+	SetZWrite(true);				// Zバッファ更新する
+	SetBlendState(BS_NONE);			// アルファブレンド無効
+
+	//エフェクト描画
+	Player_EffectManager->Draw("jet");
+	Player_EffectManager->Draw("collision");
+}
+
+//============================================
+// 位置取得
+//============================================
+XMFLOAT3& Player::GetPos()
+{
+	return m_Pos;
+}
+
+//============================================
+//角度を取得
+//============================================
+float Player::RotZ(XMFLOAT2 JOY) {
+	JOY.y *= -1;
+	float z = atan(JOY.y / JOY.x);	//アークタンジェントを取得→ラジアン値
+	float x = z * 180.0f / PI;			//取得したラジアン値を角度に直して返す
+	return x;
+}

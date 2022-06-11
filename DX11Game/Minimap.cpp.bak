@@ -1,0 +1,55 @@
+//=============================================================================
+// ミニマップ表示 [minimap.cpp]
+//　12/14 三輪卓弘
+//=============================================================================
+#include "Minimap.h"
+#include "Texture.h"
+#include "polygon.h"
+
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define PATH_MINIMAP_TEXTURE	L"data/texture/minimap.png"	//◆未実装　ミニマップの画像ファイル
+#define MINIMAP_POS_X		0.0f							//ミニマップの中心座標X
+#define MINIMAP_POS_Y		0.0f							//ミニマップの中心座標Y
+#define MINIMAP_WIDTH		900							//ミニマップの横幅
+#define MINIMAP_HEIGHT		600							//ミニマップの縦幅
+
+//=============================================================================
+// グローバル変数
+//=============================================================================
+static XMFLOAT2 g_vPos;			//画面上のミニマップの座標
+static XMFLOAT2 g_vSize;		//ミニマップの大きさ
+static ID3D11ShaderResourceView* g_pTexture;
+
+HRESULT Minimap::Init(void)
+{
+	HRESULT hr = S_OK;
+	ID3D11Device* pDevice = GetDevice();
+
+	// テクスチャ読込
+	hr = CreateTextureFromFile(pDevice, PATH_MINIMAP_TEXTURE, &g_pTexture);
+	if (FAILED(hr))
+		return hr;
+}
+void Minimap::Uninit(void)
+{
+	SAFE_RELEASE(g_pTexture);
+}
+
+void Minimap::Update(void)
+{
+
+}
+
+void Minimap::Draw(void)
+{
+	ID3D11DeviceContext* pDC = GetDeviceContext();
+	//ミニマップ描画
+	SetPolygonSize(g_vSize.x, g_vSize.y);
+	SetPolygonPos(g_vPos.x, g_vPos.y);
+	SetPolygonTexture(g_pTexture);
+	SetPolygonUV(0.0f, 0.0f);
+	SetPolygonColor(g_vColor.x, g_vColor.y, g_vColor.z);
+	DrawPolygon(pDC);
+}
